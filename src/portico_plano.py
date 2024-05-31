@@ -2,9 +2,6 @@ from elementos_estruturais import *
 import numpy as np
 
 '''
-TODO: implementar Viga Gerber
-DONE: implementar função que permita adicionar várias barras de uma vez 
-TODO Agora calcular para as caragas pontuais de cada barra
 TODO melhorar eficiencia
 TODO try except
 '''
@@ -32,40 +29,27 @@ Como consideramos apenas estruturas isostáticas, esse sistema terá várias col
 
 class PorticoPlano:
 
-    def __init__(self):
-        self.barras: list[Barra] = []
+    def __init__(self, s: Sistema):
+        self.sistema: Sistema = s
         self.resolvido: bool = False
         self.coeff: np.ndarray = None
         self.ind: np.ndarray = None
         self.variaveis: np.ndarray = None
         
-    
     def print_reactions(self):
-        for idx, b in enumerate(self.barras):
+        for idx, b in enumerate(self.sistema.barras):
             print(f"Reações da barra {idx}:")
             print(f"p0: F = {b.p0.f}, M = {b.p0.m}")
             print(f"p1: F = {b.p1.f}, M = {b.p1.m}")
 
-    '''
-    Resolve o sistema de equações formado pelas barras. 
-
-    O algoritmo monta a matriz de coeficientes do sistema linear e a resolve. 
-    '''
     def resolver_sistema(self) -> None:
-
-        '''
-        Cada ponto tem 6 variáveis (3 componentes de f e 3 componentes de m)
-        Cada barra tem 2 pontos.
-        O sistema fica com 6 fileiras (1 para cada componente de f e m)
-        E (6 x 2 x barras) colunas
-        ''' 
 
         self.coeff = np.zeros((6, 6 * 2 * len(self.barras)))
         self.ind = np.zeros(6)
 
         # 1. Equilíbrio das forças 
         for eixo_f in range(3):
-            for idx, b in enumerate(self.barras):
+            for idx, b in enumerate(self.sistema.barras):
                 self.coeff[eixo_f][12*idx + eixo_f] = b.p0.vinculo.f_restriction[eixo_f]
                 self.coeff[eixo_f][12*idx + eixo_f + 6] = b.p1.vinculo.f_restriction[eixo_f]
                 ''' 
@@ -77,14 +61,14 @@ class PorticoPlano:
         # 2. Equilíbrio dos momentos
         for idx_eixo_m in range(3, 6):
             eixo_m = idx_eixo_m - 3
-            for idx, b in enumerate(self.barras):
+            for idx, b in enumerate(self.sistema.barras):
                 # Primeiro consideramos os momentos gerados pelos próprios vínculos 
                 self.coeff[idx_eixo_m][12*idx + eixo_m + 3] = b.p0.vinculo.m_restriction[eixo_m]
                 self.coeff[idx_eixo_m][12*idx + eixo_m + 9] = b.p1.vinculo.m_restriction[eixo_m]
 
                 
         # Depois precisamos considerar os momentos de cada força do sistema com relação à origem (polo arbitrário)`
-        for idx, b in enumerate(self.barras):
+        for idx, b in enumerate(self.sistema.barras):
             # Mx
             self.coeff[3][12*idx + 1] = -b.p0.pos.z * b.p0.vinculo.f_restriction.y
             self.coeff[3][12*idx + 2] = b.p0.pos.y * b.p0.vinculo.f_restriction.z
@@ -129,7 +113,7 @@ class PorticoPlano:
 
         iVar = 0
 
-        for idx, b in enumerate(self.barras):
+        for idx, b in enumerate(self.sistema.barras):
             for eixo in range(3):
                 if(b.p0.vinculo.f_restriction[eixo]):
                     b.p0.f[eixo] = self.variaveis[iVar]
@@ -138,7 +122,7 @@ class PorticoPlano:
                     b.p1.f[eixo] = self.variaveis[iVar]
                     iVar = iVar + 1
         
-        for idx, b in enumerate(self.barras):
+        for idx, b in enumerate(self.sistema.barras):
             for eixo in range(3):
                 if(b.p0.vinculo.m_restriction[eixo]):
                     b.p0.m[eixo] = self.variaveis[iVar]
@@ -149,9 +133,3 @@ class PorticoPlano:
 
         self.resolvido = True
         
-    def add_barra(self, b: Barra) -> None:
-        self.barras.append(b)
-
-    def add_barra(self, barras: Barra) -> None:
-        for b in barras:
-            self.barras.append(b)
