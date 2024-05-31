@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Pen Tool</title>
+  <style>
+    /* Add some basic styling to our canvas */
+    canvas {
+      border: 1px solid black;
+    }
+
+    #selected-vertex {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #f0f0f0;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas" width="600" height="400"></canvas>
+  <div id="vertex-popup"
+    style="display: none; position: absolute; top: 60px; right: 10px; background-color: #f0f0f0; padding: 10px; border: 1px solid #ccc;">
+    <label>x: <input id="vertex-x" type="number" value="0"></label>
+    <br>
+    <label>y: <input id="vertex-y" type="number" value="0"></label>
+    <br>
+    <h4>Vinculo</h4>
+    <select id="vinculo-preset">
+      <option value="">--</option>
+      <option value="ApoioSimplesX">Apoio Simples X</option>
+      <option value="ApoioSimplesY">Apoio Simples Y</option>
+      <option value="ApoioSimplesZ">Apoio Simples Z</option>
+      <option value="Articulacao">Articulacao</option>
+      <option value="Engaste">Engaste</option>
+      <option value="Nulo">Nulo</option>
+    </select>
+    <br>
+    <label>f.x: <input id="f-x-1" type="radio" name="f-x" value="1"> 1 <input id="f-x-0" type="radio" name="f-x"
+        value="0"> 0</label>
+    <br>
+    <label>f.y: <input id="f-y-1" type="radio" name="f-y" value="1"> 1 <input id="f-y-0" type="radio" name="f-y"
+        value="0"> 0</label>
+    <br>
+    <label>f.z: <input id="f-z-1" type="radio" name="f-z" value="1"> 1 <input id="f-z-0" type="radio" name="f-z"
+        value="0"> 0</label>
+    <br>
+    <label>m.x: <input id="m-x-1" type="radio" name="m-x" value="1"> 1 <input id="m-x-0" type="radio" name="m-x"
+        value="0"> 0</label>
+    <br>
+    <label>m.y: <input id="m-y-1" type="radio" name="m-y" value="1"> 1 <input id="m-y-0" type="radio" name="m-y"
+        value="0"> 0</label>
+    <br>
+    <label>m.z: <input id="m-z-1" type="radio" name="m-z" value="1"> 1 <input id="m-z-0" type="radio" name="m-z"
+        value="0"> 0</label>
+    <br>
+    <button id="update-vertex">Update Vertex</button>
+  </div>
+
+  <div id="selected-vertex"></div>
+  <button id="mode-toggle">Toggle Mode</button>
+  <button id="clear-btn">Clear</button>
+  <div>
+    <label>F.x:</label>
+    <input type="number" id="fx" value="0">
+    <br>
+    <label>F.y:</label>
+    <input type="number" id="fy" value="0">
+    <br>
+    <label>F.z:</label>
+    <input type="number" id="fz" value="0">
+    <br>
+    <label>Pos.x:</label>
+    <input type="number" id="px" value="0">
+    <br>
+    <label>Pos.y:</label>
+    <input type="number" id="py" value="0">
+    <br>
+    <label>Pos.z:</label>
+    <input type="number" id="pz" value="0">
+    <br>
+    <button id="add-carga-btn">Add Carga</button>
+  </div>
+  <div>
+    <h2>Load an example:</h2>
+    <select id="preset">
+      <option value="">--</option>
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+    <button id="load-example-btn">Load</button>
+  </div>
+  
+  
+
+  <script src="script.js"></script>
+</body>
+
+</html>
