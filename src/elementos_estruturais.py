@@ -1,5 +1,6 @@
-from utils import *
+from utils import vec3, vec3bool
 import scipy.integrate as integrate
+from dataclasses import dataclass
 
 @dataclass
 class Vinculo:
@@ -26,9 +27,9 @@ class CargaPontual:
        self.pos = vec3(pos_x, pos_y, pos_z)
        self.f = vec3(f_x, f_y, f_z)
 
-    def __init__(self, pos:vec3, f:vec3):
-        self.pos = pos
-        self.f = f
+    # def __init__(self, pos:vec3, f:vec3):
+    #     self.pos = pos
+    #     self.f = f
 
 class CargaDistribuida:
     def __init__(self, x0: float, y0:float , z0: float, x1: float, y1: float, z1: float, func) -> None:
@@ -42,7 +43,7 @@ class CargaDistribuida:
 
 class Momento:
     def __init__(self, x: float, y: float, z: float) -> None:
-        m = vec3 (x, y, z)
+        self.m = vec3(x, y, z)
 
 class Barra:
     def __init__(self, p0: Ponto, p1: Ponto):
@@ -58,19 +59,19 @@ class Sistema:
     def add_barra(self, b: Barra) -> None:
         self.barras.append(b)
 
-    def add_barra(self, barras: Barra) -> None:
+    def add_barra(self, barras: list[Barra]) -> None:
         for b in barras:
             self.barras.append(b)
 
-    def add_carga(self, c: CargaPontual) -> None:
-        self.cargas.append(c)
+    # def add_carga(self, c: CargaPontual) -> None:
+    #     self.cargas.append(c)
 
     def add_carga(self, cargas: list[CargaPontual]) -> None:
         for c in cargas:
             self.cargas.append(c)
 
-    def add_carga(self, c: CargaDistribuida) -> None:
-        self.cargas.append(c.carga)
+    # def add_carga(self, c: CargaDistribuida) -> None:
+    #     self.cargas.append(c)
 
     def add_momento(self, m: Momento) -> None:
         self.momentos.append(m)

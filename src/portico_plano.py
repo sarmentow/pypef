@@ -44,7 +44,7 @@ class PorticoPlano:
 
     def resolver_sistema(self) -> None:
 
-        self.coeff = np.zeros((6, 6 * 2 * len(self.barras)))
+        self.coeff = np.zeros((6, 6 * 2 * len(self.sistema.barras)))
         self.ind = np.zeros(6)
 
         # 1. Equilíbrio das forças 
@@ -55,8 +55,8 @@ class PorticoPlano:
                 ''' 
                 Como coeff = np.zeros, implicitamente, tudo que não teve valor atribuido tem valor zero.
                 '''
-                for carga in b.cargas:
-                    self.ind[eixo_f] += -carga.f[eixo_f]
+            for carga in self.sistema.cargas:
+                self.ind[eixo_f] += -carga.f[eixo_f]
         
         # 2. Equilíbrio dos momentos
         for idx_eixo_m in range(3, 6):
@@ -98,11 +98,11 @@ class PorticoPlano:
 
 
             result = np.array([0., 0., 0.])
-            for carga in b.cargas:
-                result += np.cross([carga.pos.x, carga.pos.y, carga.pos.z], [carga.f.x, carga.f.y, carga.f.z])
+        for carga in self.sistema.cargas:
+            result += np.cross([carga.pos.x, carga.pos.y, carga.pos.z], [carga.f.x, carga.f.y, carga.f.z])
 
-            for momento in b.momentos:
-                result += np.array([momento.m.x, momento.m.y, momento.m.z])
+        for momento in self.sistema.momentos:
+            result += np.array([momento.m.x, momento.m.y, momento.m.z])
             
             self.ind[3:6] += -result
 
