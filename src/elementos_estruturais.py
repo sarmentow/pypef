@@ -7,6 +7,12 @@ class Vinculo:
     f_restriction: vec3bool = vec3bool(False, False, False)
     m_restriction: vec3bool = vec3bool(False, False, False)
 
+    def __str__(self):
+        return f"{self.f_restriction}, {self.m_restriction}"
+
+    def __eq__(self, other):
+        return self.f_restriction == other.f_restriction and self.m_restriction == other.m_restriction
+
 class Vinculos:
     ApoioSimplesX = Vinculo(f_restriction=vec3bool(True, False, False))
     ApoioSimplesY = Vinculo(f_restriction=vec3bool(False, True, False))
@@ -21,6 +27,9 @@ class Ponto:
         self.vinculo = vinculo
         self.f: vec3 = vec3(0, 0, 0)
         self.m: vec3 = vec3(0, 0, 0)
+
+    def __str__(self):
+        return f"Ponto em {self.pos}, vinculo {self.vinculo}"
 
 class CargaPontual:
     def __init__(self, pos_x: float, pos_y: float, pos_z: float, f_x: float, f_y: float, f_z: float) -> None:
@@ -49,6 +58,9 @@ class Barra:
     def __init__(self, p0: Ponto, p1: Ponto):
         self.p0 = p0
         self.p1 = p1
+
+    def __str__(self):
+        return f"Barra - p0: {self.p0}, p1: {self.p1}"
 
 class Sistema:
     def __init__(self) -> None: 

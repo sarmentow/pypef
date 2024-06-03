@@ -35,3 +35,9 @@ class vec3bool:
             case 1: return self.y
             case 2: return self.z
             case _: raise IndexError 
+            
+    def __str__(self):
+        return f"{self.x}i + {self.y}j + {self.z}k"
+    
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y and self.z == other.z
