@@ -10,12 +10,10 @@ TODO publicar biblioteca no PyPI
 ## Como usar a biblioteca
 TODO
 ## Exemplos
-A pasta `examples/` contém alguns programas que utilizam a PyPEF como biblioteca. 
-- (na pasta exemplos vai ter o programa que implementa o editor interativo no qual o usuário pode criar estruturas usando apenas o mouse. O editor vai converter a representação gráfica da estrutura para o código necessário para resolvê-la e talvez até mostrar o diagrama de esforços solicitantes)
-- (outro bom exemplo seria um programa que pega um sistema e transforma ele para uma representação gráfica (exporta o sistema para um .png ou .svg))
-
+- A pasta `apps/` contém um exemplo de programa que utiliza a PyPEF como biblioteca para proporcionar uma experiência interativa na construção de estruturas isostáticas. 
+- `src/` contém um notebook com diversos exemplos de utilização da PyPEF
 ## Dependências
-PyPEF tem apenas NumPy como dependência. Para mais informações sobre o NumPy acesse o [site oficial](https://numpy.org) da biblioteca.
+PyPEF tem apenas NumPy como dependência. Para mais informações sobre o NumPy acesse o [site oficial](https://numpy.org).
 
 ## Licença
 MIT (atribuição é bem vinda <3)
