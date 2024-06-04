@@ -39,8 +39,20 @@ class PorticoPlano:
     def print_reactions(self):
         for idx, b in enumerate(self.sistema.barras):
             print(f"Reações da barra {idx}:")
-            print(f"p0: F = {b.p0.f}, M = {b.p0.m}")
-            print(f"p1: F = {b.p1.f}, M = {b.p1.m}")
+
+            print(b.p0.f)
+
+            print(b.p0.f.module())
+
+            if b.p0.f.module() != 0 or b.p0.m.module() != 0:
+                print(f"p0: F = {b.p0.f}, M = {b.p0.m}")
+            else:
+                print(f"p0: Reação nula")
+
+            if b.p1.f.module() != 0 or b.p1.m.module() != 0:
+                print(f"p1: F = {b.p1.f}, M = {b.p1.m}")
+            else:
+                print(f"p1: Reação nula")
 
     def resolver_sistema(self) -> None:
 
@@ -72,7 +84,7 @@ class PorticoPlano:
             # Mx
             self.coeff[3][12*idx + 1] = -b.p0.pos.z * b.p0.vinculo.f_restriction.y
             self.coeff[3][12*idx + 2] = b.p0.pos.y * b.p0.vinculo.f_restriction.z
-            self.coeff[3][12*idx + 3] = b.p0.vinculo.m_restriction.x 
+            self.coeff[3][12*idx + 3] = b.p0.vinculo.m_restriction.x
 
             self.coeff[3][12*idx + 1 + 6] = -b.p1.pos.z * b.p1.vinculo.f_restriction.y
             self.coeff[3][12*idx + 2 + 6] = b.p1.pos.y * b.p1.vinculo.f_restriction.z
@@ -104,32 +116,52 @@ class PorticoPlano:
         for momento in self.sistema.momentos:
             result += np.array([momento.m.x, momento.m.y, momento.m.z])
             
-            self.ind[3:6] += -result
+        self.ind[3:6] += -result
 
         # Remove linhas e colunas LD
         self.coeff = self.coeff[:, ~np.all(self.coeff == 0, axis=0)]
-        self.coeff = self.coeff[~np.all(self.coeff == 0, axis= 1)]
-        self.variaveis = np.linalg.solve(self.coeff, self.ind)
+        
+        all_zeros = np.all(self.coeff == 0, axis=1)
+        indexes_zeros = np.where(all_zeros)[0]
+
+        coeff_treated = np.delete(self.coeff, indexes_zeros, axis=0)
+        ind_treated = np.delete(self.ind, indexes_zeros, axis=0)
+
+        self.variaveis = np.linalg.solve(coeff_treated, ind_treated)
 
         iVar = 0
 
         for idx, b in enumerate(self.sistema.barras):
             for eixo in range(3):
                 if(b.p0.vinculo.f_restriction[eixo]):
-                    b.p0.f[eixo] = self.variaveis[iVar]
-                    iVar = iVar + 1
+                    if len(np.where(indexes_zeros == eixo)) == 0:
+                        b.p0.f[eixo] = self.variaveis[iVar]
+                        iVar = iVar + 1
                 if(b.p1.vinculo.f_restriction[eixo]):
-                    b.p1.f[eixo] = self.variaveis[iVar]
-                    iVar = iVar + 1
+                    if len(np.where(indexes_zeros == eixo)) == 0:
+                        b.p1.f[eixo] = self.variaveis[iVar]
+                        iVar = iVar + 1
         
         for idx, b in enumerate(self.sistema.barras):
             for eixo in range(3):
                 if(b.p0.vinculo.m_restriction[eixo]):
-                    b.p0.m[eixo] = self.variaveis[iVar]
-                    iVar = iVar + 1
+                    if len(np.where(indexes_zeros == eixo)) == 0:
+                        b.p0.m[eixo] = self.variaveis[iVar]
+                        iVar = iVar + 1
                 if(b.p1.vinculo.m_restriction[eixo]):
-                    b.p1.m[eixo] = self.variaveis[iVar]
-                    iVar = iVar + 1
+                    if len(np.where(indexes_zeros == eixo)) == 0:
+                        b.p1.m[eixo] = self.variaveis[iVar]
+                        iVar = iVar + 1
 
         self.resolvido = True
         
+
+
+s = Sistema()
+inicio = Ponto(0, 0, 0, Vinculos.Engaste)
+fim = Ponto(1, 0, 0, Vinculos.Nulo)
+b = Barra(inicio, fim)
+s.add_barra([b])
+p = PorticoPlano(s)
+p.resolver_sistema()
+p.print_reactions()
