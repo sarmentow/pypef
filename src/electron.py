@@ -1,4 +1,5 @@
 # Para evitar que pequenos problemas de versionamento impeçam a gui de rodar.
+import sys
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -11,6 +12,7 @@ from portico_plano import *
 
 s_str_raw = input()
 s_raw = json.loads(s_str_raw)
+#print(s_raw)
 s = Sistema()
 
 def ponto_from_raw(i, nulo=False):
@@ -61,6 +63,7 @@ for idx, i in enumerate(s_raw['cargas']):
 s.add_carga(cargas)
 p = PorticoPlano(s)
 p.resolver_sistema()
+#p.print_reactions()
 
 '''
 JSON obj format response for
@@ -81,5 +84,4 @@ for barra in p.sistema.barras:
     if barra.p0.vinculo != Vinculos.Nulo: pre_json.append(json_vertex(barra.p0))
     if barra.p1.vinculo != Vinculos.Nulo: pre_json.append(json_vertex(barra.p1))
 
-import sys
 sys.stdout.write(json.dumps(pre_json))

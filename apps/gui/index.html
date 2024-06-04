@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Pen Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar {
+      background-color: #007acc;
+      padding: 10px 20px;
+      color: white;
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    canvas {
+      border: 1px solid #007acc;
+      margin: 20px;
+      display: block;
+    }
+
+    #selected-vertex,
+    #vertex-popup,
+    div,
+    label {
+      background-color: #e6f2ff;
+      border: 1px solid #007acc;
+      border-radius: 5px;
+      padding: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    #selected-vertex {
+      position: absolute;
+      top: 60px;
+      right: 20px;
+    }
+
+    #vertex-popup {
+      display: none;
+      position: absolute;
+      top: 140px;
+      right: 20px;
+    }
+
+    button {
+      background-color: #007acc;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px 0;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #005f99;
+    }
+
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 5px;
+      margin: 5px 0;
+      border: 1px solid #007acc;
+      border-radius: 5px;
+    }
+
+    label {
+      display: block;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="navbar">
+    <h1>PEF3208 Poli-USP 2024.1</h1>
+  </div>
+  <canvas id="canvas" width="600" height="400"></canvas>
+  <div id="vertex-popup">
+    <label>x: <input id="vertex-x" type="number" value="0"></label>
+    <label>y: <input id="vertex-y" type="number" value="0"></label>
+    <h4>Vinculo</h4>
+    <select id="vinculo-preset">
+      <option value="">--</option>
+      <option value="ApoioSimplesX">Apoio Simples X</option>
+      <option value="ApoioSimplesY">Apoio Simples Y</option>
+      <option value="ApoioSimplesZ">Apoio Simples Z</option>
+      <option value="Articulacao">Articulacao</option>
+      <option value="Engaste">Engaste</option>
+      <option value="Nulo">Nulo</option>
+    </select>
+    <label>f.x: <input id="f-x-1" type="radio" name="f-x" value="1"> 1 <input id="f-x-0" type="radio" name="f-x"
+        value="0"> 0</label>
+    <label>f.y: <input id="f-y-1" type="radio" name="f-y" value="1"> 1 <input id="f-y-0" type="radio" name="f-y"
+        value="0"> 0</label>
+    <label>f.z: <input id="f-z-1" type="radio" name="f-z" value="1"> 1 <input id="f-z-0" type="radio" name="f-z"
+        value="0"> 0</label>
+    <label>m.x: <input id="m-x-1" type="radio" name="m-x" value="1"> 1 <input id="m-x-0" type="radio" name="m-x"
+        value="0"> 0</label>
+    <label>m.y: <input id="m-y-1" type="radio" name="m-y" value="1"> 1 <input id="m-y-0" type="radio" name="m-y"
+        value="0"> 0</label>
+    <label>m.z: <input id="m-z-1" type="radio" name="m-z" value="1"> 1 <input id="m-z-0" type="radio" name="m-z"
+        value="0"> 0</label>
+    <button id="update-vertex">Update Vertex</button>
+  </div>
+
+  <div id="selected-vertex"></div>
+  <button id="solve-btn">Solve</button>
+  <button id="mode-toggle">Toggle Mode</button>
+  <button id="clear-btn">Clear</button>
+  <div>
+    <label>F.x:</label>
+    <input type="number" id="fx" value="0">
+    <label>F.y:</label>
+    <input type="number" id="fy" value="0">
+    <label>F.z:</label>
+    <input type="number" id="fz" value="0">
+    <label>Pos.x:</label>
+    <input type="number" id="px" value="0">
+    <label>Pos.y:</label>
+    <input type="number" id="py" value="0">
+    <label>Pos.z:</label>
+    <input type="number" id="pz" value="0">
+    <button id="add-carga-btn">Add Carga</button>
+  </div>
+  <div>
+    <h2>Load an example:</h2>
+    <select id="preset">
+      <option value="">--</option>
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+    <button id="load-example-btn">Load</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

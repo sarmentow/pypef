@@ -44,8 +44,8 @@ class PorticoPlano:
 
     def resolver_sistema(self) -> None:
 
-        self.coeff = np.zeros((6, 6 * 2 * len(self.sistema.barras)), dtype=np.float32)
-        self.ind = np.zeros(6, dtype=np.float32)
+        self.coeff = np.zeros((6, 6 * 2 * len(self.sistema.barras)))
+        self.ind = np.zeros(6)
 
         # 1. Equilíbrio das forças 
         for eixo_f in range(3):
@@ -97,12 +97,12 @@ class PorticoPlano:
             self.coeff[5][12*idx + 5 + 6] = b.p1.vinculo.m_restriction.z
 
 
-            result = np.array([0., 0., 0.], dtype=np.float32)
+            result = np.array([0., 0., 0.])
         for carga in self.sistema.cargas:
             result += np.cross([carga.pos.x, carga.pos.y, carga.pos.z], [carga.f.x, carga.f.y, carga.f.z])
 
         for momento in self.sistema.momentos:
-            result += np.array([momento.m.x, momento.m.y, momento.m.z], dtype=np.float32)
+            result += np.array([momento.m.x, momento.m.y, momento.m.z])
             
         self.ind[3:6] += -result
 
@@ -133,14 +133,3 @@ class PorticoPlano:
 
         self.resolvido = True
         
-
-# Barra simples com engaste, nenhuma força, esperamos resultado nulo
-s = Sistema()
-inicio = Ponto(0, 0, 0, Vinculos.Engaste)
-fim = Ponto(1, 0, 0, Vinculos.Nulo)
-b = Barra(inicio, fim)
-s.add_carga([CargaPontual(0.5, 0.0, 0.0, 1.0, -1.0, 0.0)])
-s.add_barra([b])
-p = PorticoPlano(s)
-p.resolver_sistema()
-p.print_reactions()
